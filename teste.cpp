@@ -8,97 +8,45 @@ long length = 10;
 const long max_length = 100000;
 
 int list[max_length];
+unsigned int contins = 0;
 
-void read()
-{
+void read(){
     int i;
     for(i=0; i<length; i++){
         list[i] = rand()%length;
     }
 }
 
-void bubbleSort()
-{
-    int temp;
-    for(long i = 0; i < length; i++)
-    {
-        for(long j = 0; j < length-i-1; j++)
-        {
-            if (list[j] > list[j+1])
-            {
-                temp        = list[j];
-                list[j]     = list[j+1];
-                list[j+1]   = temp;
-            }
-        }
-    }
-}
-
-void insertionSort()
-{
-    int temp;
-    for(long i = 1; i < length; i++)
-    {
-        temp = list[i];
+void insertionSort(){
+    int temp;                               contins++;
+    for(long i = 1; i < length; i++){
+                                            contins+=2;
+        temp = list[i];                     contins++;
         long j;
-        for(j = i-1; j >= 0 && list[j] > temp; j--)
-        {
-            list[j+1] = list[j];
+                                            contins+=3;
+        for(j = i-1; j >= 0 && list[j] > temp; j--){contins+=3;
+            list[j+1] = list[j];            contins++;
         }
-        list[j+1] = temp;
+        list[j+1] = temp;                   contins++;
     }
 }
-
-long partition(long left, long right)
-{
-    int pivot_element = list[left];
-    int lb = left, ub = right;
-    int temp;
-
-    while (left < right)
-    {
-        while(list[left] <= pivot_element)
-            left++;
-        while(list[right] > pivot_element)
-            right--;
-        if (left < right)
-        {
-            temp        = list[left];
-            list[left]  = list[right];
-            list[right] = temp;
-        }
-    }
-    list[lb] = list[right];
-    list[right] = pivot_element;
-    return right;
-}
-
-void quickSort(long left, long right)
-{
-    if (left < right)
-    {
-        long pivot = partition(left, right);
-        quickSort(left, pivot-1);
-        quickSort(pivot+1, right);
-    }
-}
-double media;
-void roda(int tamanho){
+double media=0;
+void roda(unsigned int tamanho){
+        media =0;
         length = tamanho;
         for(int i=0; i<10; i++){
             double t1,t2;
             read();
-            t1 = clock();
             insertionSort();
-            t2 = clock();
-            double tempo = (t2 - t1)/CLOCKS_PER_SEC;
-            //cout << tempo << " sec\n";
-            media = media + tempo;
-            }
+            cout << "contador insertion sort: "<< contins << "\n";
+            media = media + contins;
+            contins = 0;
+        }
+
 }
 
 int cont=0;
-double mediabin;
+double mediabin=0;
 
 void PesquisaBinaria (int chave, int Tam)
 {
@@ -108,59 +56,66 @@ void PesquisaBinaria (int chave, int Tam)
      while (inf <= sup)
      {
           cont++;
-          meio = (inf + sup)/2;
-          if (chave == list[meio])
+          meio = (inf + sup)/2;cont++;
+          if (chave == list[meio]){
+                cont++;
                return;
-          if (chave < list[meio])
+          }cont++;
+          if (chave < list[meio]){
                sup = meio-1;
-          else
-               inf = meio+1;
+               cont++;
+          }
+          else{
+            inf = meio+1;
+            cont++;
+          }
      }
+     cont++;
      return;   // não encontrado
 }
 
-void binarysearch(int tamanho){
+void binarysearch(unsigned int tamanho){
 
-    double t1,t2;
     int y;
     for(y=0; y<10; y++){
-        int key = rand()%tamanho;
-
+        unsigned int key = (rand()*rand())%(2*tamanho);
         PesquisaBinaria(key,tamanho);
-        media = media +  cont;
+        mediabin = mediabin +  cont;
+        cout << "\ncontador binario:" << cont;
         cont =0;
     }
-    cout << "\nMedia binary search:" << media/10.0;
-    media =0;
+    cout << "\n\n\nMedia binary search:" << mediabin/10.0;
+    mediabin =0;
 }
-
 
 
 int main()
 {
+    srand(time(NULL));
+
     cout << "\n\n\n\n***********Quando N = 10**************** \n\n";
     roda(10);
-    cout << "media do insertion: " << media/10.0;
+    cout << "-------media do insertion: " << media/10.0;
     binarysearch(10);
 
     cout << "\n\n\n\n***********Quando N = 100**************** \n\n";
     roda(100);
-    cout << "media do insertion: " << media/10.0;
+    cout << "----------media do insertion: " << media/10.0;
     binarysearch(100);
 
     cout << "\n\n\n\n***********Quando N = 1000**************** \n\n";
     roda(1000);
-    cout << "media do insertion: " << media/10.0;
+    cout << "----------media do insertion: " << media/10.0;
     binarysearch(1000);
 
     cout << "\n\n\n\n***********Quando N = 10000**************** \n\n";
     roda(10000);
-    cout << "media do insertion: " << media/10.0;
+    cout << "----------media do insertion: " << media/10.0;
     binarysearch(10000);
 
     cout << "\n\n\n\n***********Quando N = 100000**************** \n\n";
     roda(100000);
-    cout << "media do insertion:" << media/10.0;
+    cout << "-----------media do insertion:" << media/10.0;
     binarysearch(100000);
 
     return 0;
