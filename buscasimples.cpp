@@ -8,61 +8,62 @@ using namespace std;
 long length;
 const long max_length = 100000;
 
-int list[max_length];
-long double media2;
+unsigned int list[max_length];
+long double media;
 
 
-void read()
-{
-    ifstream fin("random.dat", ios::binary);
-    for (long i = 0; i < length; i++)
-    {
-        fin.read((char*)&list[i], sizeof(int));
-    }
-    fin.close();
-}
-
-void sequentialSearch(int n, int x){
-
+void cria_lista(unsigned int n){
     int i;
     for(i=0; i<n-1; i++){
-        if (list[i] == x)
-            return;
+        list[i] = (rand()*rand())%n;
     }
 
 }
+unsigned int sequentialSearch(int n, unsigned int x){
+    unsigned int cont=0;
+    int i;
+    cont+=2;
+    for(i=0; i<n-1; i++){
+        cont+=3;
+        if (list[i] == x)
+            return cont;
+    }
+    return cont;
 
-void rodabusca(int n, int x){
-    printf("\nN: %d >>>>>",n);
-    long double t1, t2;
-    t1 = clock();
+}
 
-    sequentialSearch(n,x);
-    t2 = clock();
+void rodabusca(int n, unsigned int x){
+    unsigned int cont = sequentialSearch(n,x);
 
-    long double time;
-    time = (t2-t1)/CLOCKS_PER_SEC;
-
-    printf(" time: %.6Lf", time);
-    media2 = media2+time;
+    printf("%d\n", cont);
+    media = media+cont;
+    cont =0;
 }
 
 int comeca(int a){
     int u;
     for(u=0; u<10; u++){
-        int x = rand()%a;
-        rodabusca(a,x);
+        unsigned int key = (rand())%(2*a);
+        printf("x = %u =>",key);
+        rodabusca(a,key);
     }
-    printf("\n\n MEDIA: %.7Lf\n\n", (media2/10.0));
-    media2 = 0.0;
+    printf("\n\n MEDIA: %Lf\n\n", (media/10.0));
+    media = 0.0;
 }
 
 
 
 int main(){
+    srand(time(NULL));
+
+    cria_lista(10);
     comeca(10);
+    cria_lista(100);
     comeca(100);
+    cria_lista(1000);
     comeca(1000);
+    cria_lista(10000);
     comeca(10000);
+    cria_lista(100000);
     comeca(100000);
 }
