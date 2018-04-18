@@ -2,30 +2,43 @@
 #include <stdlib.h>
 #include <math.h>
 
-double vetor[5]  = {1.0,2.0,5.0,8.0,16.0};
+double vetor[5]  = {1.0,2.0,4.0,8.0,32.0};
 void ve_se_ta_Certo(double a1, double q, int inicio, int fim){
-	printf("teste4\n");
 
-	if(fim == inicio || fim == inicio+1){
-		double valor = pow(q, fim-1);
+	if(fim == inicio){
+		double valor = pow(q, fim);
 		printf("%f\n",a1*valor);
-		if(vetor[fim] == a1*valor){
-			printf("fim %d\n", fim);
-			printf("o valor que falta é %f", a1*valor);
-		}else{
-			printf("não falta nada\n");
+
+
+		if(fim > 0 && vetor[fim]/vetor[fim-1] != q){
+			printf("falta o %f\n", a1*pow(q, fim));
+		}else if(fim > 0 && vetor[fim+1]/vetor[fim] !=q){
+			printf("falta o %f\n", a1*pow(q, fim+1));
 		}
+
+
+		/*
+		if(vetor[fim] != a1*valor){
+			printf("falta o %f", a1*valor);
+		}else{
+			printf("falta o %f\n", a1*valor/q);
+		}
+		printf("entrou aqui %f %d %d\n", vetor[fim], fim, inicio);
+		*/
+
+
 		return;
-	}
-	printf("teste4\n");
-	double novoq = pow(q, (fim+1)/2);
-	printf("%f\n", novoq);
-	if(vetor[fim/2]+1 == a1*novoq){
-		printf("chegou aqui\n");
-		ve_se_ta_Certo(a1, q, (fim+1)/2, fim);
 	}else{
-		printf("chegou aqui2\n");
-		ve_se_ta_Certo(a1, q, inicio, (fim+1)/2);
+		double novoq = pow(q, (fim+1)/2);
+		printf("%f\n", novoq);
+		if(vetor[(fim-inicio)/2] == a1*novoq){
+			printf("chegou aqui\n");
+			ve_se_ta_Certo(a1, q, inicio+(fim-inicio+2)/2, fim);
+		}else{
+			printf("chegou aqui2\n");
+			printf("%d, %d *******",inicio, fim);
+			ve_se_ta_Certo(a1, q, inicio, inicio+(fim-inicio)/2);
+		}
 	}
 }
 
@@ -39,14 +52,11 @@ int main(){
 	a1 = vetor[0];
 	if(vetor[1]/vetor[0] == vetor[2]/vetor[1]){
 		q = vetor[1]/vetor[0];
-		printf("teste1\n");
 	}else if(vetor[1]/vetor[0] > vetor[2]/vetor[1]){
-		printf("teste2\n");
 		q = vetor[2]/vetor[1];
 		printf("o termo que falta é %f ", a1*q);
 	}else{
 		q = vetor[1]/vetor[0];
-		printf("teste3\n");
 
 	}
 
